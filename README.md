@@ -4,9 +4,9 @@ do_cli
 
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/do_cli.svg)](https://npmjs.org/package/do_cli)
-[![Downloads/week](https://img.shields.io/npm/dw/do_cli.svg)](https://npmjs.org/package/do_cli)
-[![License](https://img.shields.io/npm/l/do_cli.svg)](https://github.com/haikyuu/do_cli/blob/master/package.json)
+[![Version](https://img.shields.io/npm/v/@abdellah-alaoui/do.svg)](https://npmjs.org/package/@abdellah-alaoui/do)
+[![Downloads/week](https://img.shields.io/npm/dw/@abdellah-alaoui/do.svg)](https://npmjs.org/package/@abdellah-alaoui/do)
+[![License](https://img.shields.io/npm/l/@abdellah-alaoui/do.svg)](https://github.com/haikyuu/do_cli/blob/master/package.json)
 
 <!-- toc -->
 * [Usage](#usage)
