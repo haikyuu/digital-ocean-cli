@@ -15,11 +15,11 @@ do_cli
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g do_cli
+$ npm install -g @abdellah-alaoui/do
 $ do_cli COMMAND
 running command...
 $ do_cli (-v|--version|version)
-do_cli/0.0.0 darwin-x64 node-v13.8.0
+@abdellah-alaoui/do/0.0.0 darwin-x64 node-v13.8.0
 $ do_cli --help [COMMAND]
 USAGE
   $ do_cli COMMAND
@@ -29,7 +29,7 @@ USAGE
 # Commands
 <!-- commands -->
 * [`do_cli autocomplete [SHELL]`](#do_cli-autocomplete-shell)
-* [`do_cli droplet`](#do_cli-droplet)
+* [`do_cli droplet [COMMAND]`](#do_cli-droplet-command)
 * [`do_cli hello`](#do_cli-hello)
 * [`do_cli help [COMMAND]`](#do_cli-help-command)
 
@@ -56,20 +56,26 @@ EXAMPLES
 
 _See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.1.5/src/commands/autocomplete/index.ts)_
 
-## `do_cli droplet`
+## `do_cli droplet [COMMAND]`
 
 Describe the command here
 
 ```
 USAGE
-  $ do_cli droplet
+  $ do_cli droplet [COMMAND]
 
 OPTIONS
+  -c, --create
   -n, --name=name  name to print
 
 DESCRIPTION
   ...
-  Extra documentation goes here
+  Available commands are:
+  - create: create a droplet from a snapshot (not working because of an API issue)
+  - snapshot: create a snapshot from a running droplet
+  - destroy: destroy a snapshot
+
+  Just run the command, we'll guide you through the process smoothly
 ```
 
 _See code: [src/commands/droplet.js](https://github.com/haikyuu/do_cli/blob/v0.0.0/src/commands/droplet.js)_

@@ -1,5 +1,6 @@
 {
-  "name": "do_cli",
+  "name": "@abdellah-alaoui/do",
+  "private": false,
   "version": "0.0.0",
   "author": "Abdellah Alaoui @haikyuu",
   "bin": {
