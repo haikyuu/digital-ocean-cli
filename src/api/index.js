@@ -5,6 +5,7 @@ module.exports = function myFetch(url, options = {}) {
   return fetch(`${base_url}${url}`, {
     headers: {
       Authorization: `Bearer ${api_key}`,
+      "Content-Type": "application/json",
       ...options.headers
     },
     ...options

@@ -6,7 +6,7 @@ const fetch = require("../api");
 
 class DropletCommand extends Command {
   static args = [{ name: "command" }];
-  commands = ["create", "snapshot", "destroy"];
+  commands = ["create", "snapshot", "destroy", "list"];
   ssh_keys = [];
   async run() {
     const { flags, args } = this.parse(DropletCommand);
@@ -23,9 +23,32 @@ class DropletCommand extends Command {
       }
     } else {
       this.error(
-        `No command with name ${args.command} exists. Did you add it to the commands property?`
+        `No command with name ${
+          args.command
+        } exists. Did you add it to the commands property?`
       );
     }
+  }
+  async list() {
+    const { droplets } = await fetch(`/droplets`);
+    if (droplets.length === 0) {
+      this.log("⚠️ No droplets are available.");
+      return;
+    }
+    const { droplet } = await prompt([
+      {
+        name: "droplet",
+        message: "Select a droplet to see its details",
+        type: "list",
+        choices: droplets.map(({ name }) => name)
+      }
+    ]);
+    const selected = droplets.find(({ name }) => name === droplet);
+    delete selected.region.sizes;
+    console.log(JSON.stringify(selected, null, 2));
+    console.log(
+      `Here is the IP address: ${selected.networks.v4[0].ip_address}`
+    );
   }
   async destroy(id) {
     let dropletId = id;
@@ -43,7 +66,9 @@ class DropletCommand extends Command {
           choices: droplets.map(({ name }) => name)
         }
       ]);
-      const { id: dropletIdToDelete } = droplets.find(({ name }) => droplet);
+      const { id: dropletIdToDelete } = droplets.find(
+        ({ name }) => droplet === name
+      );
       dropletId = dropletIdToDelete;
     }
     // check for snapshots from this droplet
@@ -68,11 +93,15 @@ class DropletCommand extends Command {
         return;
       }
     }
-    const res = await fetch(`/droplets/${dropletId}`, {
-      method: "delete",
-      noResponse: true
-    });
-    this.log(res);
+    try {
+      const res = await fetch(`/droplets/${dropletId}`, {
+        method: "delete",
+        noResponse: true
+      });
+      this.log("Droplet destroyed successfully");
+    } catch (error) {
+      this.log("Error destroying the droplet", error);
+    }
   }
   async snapshot(id) {
     let dropletId = id;
@@ -113,7 +142,7 @@ class DropletCommand extends Command {
       this.log("✅ no droplet is using this snapshot");
     } else {
       this.log("⚠️ The following droplets are using this snapshot");
-      this.log(droplets.map(({ name }) => `- ${name}`).join("/n"));
+      this.log(droplets.map(({ name }) => `- ${name}`).join("\n"));
       const { shouldContinue } = await prompt([
         {
           name: "shouldContinue",
@@ -135,21 +164,20 @@ class DropletCommand extends Command {
     ]);
     try {
       this.log("Creating the droplet ...");
-      this.log("Snapshot ID", snapshotId);
       const result = await fetch(`/droplets`, {
-        method: "post",
+        method: "POST",
         body: JSON.stringify({
           name,
           image: snapshotId,
           region: "nyc3",
           size: "s-1vcpu-1gb",
-          ssh_keys: this.ssh_keys,
+          ssh_keys: this.ssh_keys
         })
       });
-      if(res.ok){
-        this.log('Droplet destroyed successfully')
-      }else{
-        this.log(res)
+      if (result.droplet) {
+        this.log("Droplet created successfully");
+      } else {
+        this.log(result);
       }
     } catch (e) {
       this.error("error creating droplet", e);
